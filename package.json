@@ -1,0 +1,39 @@
+{
+  "name": "trippere-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "material-ui": "^0.19.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-apollo": "^1.4.15",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-form": "^7.0.3",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1"
+  },
+  "scripts": {
+    "start": "webpack && webpack-dev-server --port 8080 --host 0.0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikitaNO/trippere-demo.git"
+  },
+  "author": "DoIT",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NikitaNO/trippere-demo/issues"
+  },
+  "homepage": "https://github.com/NikitaNO/trippere-demo#readme"
+}
