@@ -9,9 +9,12 @@ import gql from 'graphql-tag'
 
 class RegisterForm extends Component {
     onSubmit (data) {
-        this.props.addUser(data.firstName, data.lastName, data.birthDate, data.gender)
-
-        console.log(data)
+        this.props.addUser(
+            data.firstName,
+            data.lastName,
+            data.birthDate,
+            data.gender
+        )
 
         history.push('/add-photos')
     }

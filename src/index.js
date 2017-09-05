@@ -10,24 +10,33 @@ import {
     createNetworkInterface
 } from 'react-apollo'
 
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { reducer } from 'redux-form'
+import thunk from 'redux-thunk'
 
 import 'bootstrap/dist/js/bootstrap.min'
 
 import { App } from './containers'
+import reducers from './reducers'
+
+import config from './config'
 
 const networkInterface = createNetworkInterface({
-    uri: 'https://api.graph.cool/simple/v1/cj769xxru17aa015697aieh4r'
+    uri: `https://api.graph.cool/simple/v1/${config.graphProjectId}`
 })
+
 const client = new ApolloClient({
     networkInterface
 });
 
-const store = createStore(combineReducers({
-    form: reducer
-}))
+const store = createStore(
+    combineReducers({
+        ...reducers,
+        form: reducer
+    }),
+    applyMiddleware(thunk)
+)
 
 ReactDOM.render(
     <ApolloProvider client={client}>

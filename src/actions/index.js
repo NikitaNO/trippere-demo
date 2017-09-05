@@ -1,0 +1,3 @@
+export {
+    uploadImage
+} from './image'

@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "decimal.js": "^7.2.3",
     "graphql-tag": "^2.4.2",
     "history": "^4.7.2",
     "jquery": "^3.2.1",
@@ -13,11 +14,15 @@
     "react": "^15.6.1",
     "react-apollo": "^1.4.15",
     "react-dom": "^15.6.1",
+    "react-dropzone": "^4.1.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-toastr": "^2.9.3",
     "redux": "^3.7.2",
     "redux-form": "^7.0.3",
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^2.1.2",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   },
