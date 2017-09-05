@@ -1,5 +1,8 @@
-import ReactDOM from 'react-dom'
 import React from 'react'
+import ReactDOM from 'react-dom'
+import { Router } from 'react-router-dom'
+
+import history from './history'
 
 import {
     ApolloClient,
@@ -7,8 +10,11 @@ import {
     createNetworkInterface
 } from 'react-apollo'
 
+import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { reducer } from 'redux-form'
+
+import 'bootstrap/dist/js/bootstrap.min'
 
 import { App } from './containers'
 
@@ -19,12 +25,16 @@ const client = new ApolloClient({
     networkInterface
 });
 
-const store = createStore(state => state)
+const store = createStore(combineReducers({
+    form: reducer
+}))
 
 ReactDOM.render(
     <ApolloProvider client={client}>
         <Provider store={store}>
-            <App />
+            <Router history={history}>
+                <App />
+            </Router>
         </Provider>
     </ApolloProvider>,
     document.getElementById('app')

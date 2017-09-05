@@ -1,13 +1,20 @@
 import React, { Component } from 'react'
+import { Switch, Route } from 'react-router-dom'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { RegisterForm, AddPhotosForm } from './../components'
 
 export default class App extends Component {
     render () {
         return (
-            <MuiThemeProvider>
-
-            </MuiThemeProvider>
+            <main>
+                <Switch>
+                    <Route exact
+                           path="/"
+                           component={RegisterForm} />
+                    <Route path="/add-photos"
+                           component={AddPhotosForm} />
+                </Switch>
+            </main>
         )
     }
 }

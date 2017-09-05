@@ -1,15 +1,5 @@
-# project: cj769za9c17ej0156x3r4dm8l
-# version: 2
-
-type User implements Node {
-  id: ID! @isUnique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  firstName: String!
-  lastName: String!
-  birthDate: DateTime!
-  sex: String!
-}
+# project: cj769xxru17aa015697aieh4r
+# version: 5
 
 type File implements Node {
   contentType: String!
@@ -20,4 +10,19 @@ type File implements Node {
   size: Int!
   updatedAt: DateTime!
   url: String! @isUnique
+}
+
+type User implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  firstName: String!
+  lastName: String!
+  birthDate: String!
+  gender: Gender!
+}
+
+enum Gender {
+  Male
+  Female
 }

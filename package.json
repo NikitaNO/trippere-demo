@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "material-ui": "^0.19.1",
+    "bootstrap": "^3.3.7",
+    "graphql-tag": "^2.4.2",
+    "history": "^4.7.2",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-apollo": "^1.4.15",
@@ -18,10 +22,13 @@
     "webpack-dev-server": "^2.7.1"
   },
   "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1"
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "style-loader": "^0.18.2"
   },
   "scripts": {
     "start": "webpack && webpack-dev-server --port 8080 --host 0.0.0.0"
