@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bootstrap": "^3.3.7",
     "decimal.js": "^7.2.3",
     "graphql-tag": "^2.4.2",
