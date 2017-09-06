@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 import * as ReactToastr from 'react-toastr'
 
@@ -13,7 +14,7 @@ import Decimal from 'decimal.js'
 
 import config from './../config'
 
-import { uploadImage } from './../actions'
+import { uploadImage, removeImage, addResized } from './../actions'
 
 const ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation)
 
@@ -35,15 +36,14 @@ const PlusIcon = styled.span`
   top: 1px;
 `
 
+const RemoveButtonContainer = styled.div`
+  position: relative;
+  top: 140px;
+  color: #a94442;
+  cursor: pointer;
+`
+
 class PhotoCard extends Component {
-    constructor (props) {
-        super(props)
-
-        this.state = {
-            resizedImageURL: null
-        }
-    }
-
     addAlert () {
         this.container.error(
             'Max size of image is 3MB',
@@ -52,6 +52,14 @@ class PhotoCard extends Component {
                 timeOut: 5000
             }
         )
+    }
+
+    onRemoveButtonClick (event) {
+        event.stopPropagation()
+
+        const { dispatch, image, index, deleteFile } = this.props
+
+        dispatch(removeImage(deleteFile, image.id, index))
     }
 
     onDrop (accepted, rejected) {
@@ -70,7 +78,7 @@ class PhotoCard extends Component {
             const isCropNeeded = !ratio.equals(config.aspectRatio)
 
             const self = this
-            const { dispatch, index, addResized } = this.props
+            const { dispatch, index } = this.props
             const body = new FormData()
 
             body.append('data', accepted[0])
@@ -83,24 +91,23 @@ class PhotoCard extends Component {
                         const startX = Math.round(image.width / 2 - requiredWidth / 2)
                         const startY = Math.round(image.height / 2 - requiredHeight / 2)
 
-                        addResized(self.props.image.id, [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${startX}x${startY}:${requiredWidth}x${requiredHeight}`])
-                            .then(
-                                ({ data }) => {
-                                    self.setState({
-                                        resizedImageURL: data.updateFile.resized[0]
-                                    })
-                                },
-                                error => {
-                                    console.warn(error)
-                                }
+                        dispatch(
+                            addResized(
+                                self.props.addResized,
+                                self.props.image.id,
+                                [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${startX}x${startY}:${requiredWidth}x${requiredHeight}`],
+                                index
                             )
+                        )
                     } else {
-                        addResized(self.props.image.id, [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${requiredWidth}x${requiredHeight}`])
-                            .then(({ data }) => {
-                                self.setState({
-                                    resizedImageURL: data.updateFile.resized[0]
-                                })
-                            })
+                        dispatch(
+                            addResized(
+                                self.props.addResized,
+                                self.props.image.id,
+                                [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${requiredWidth}x${requiredHeight}`],
+                                index
+                            )
+                        )
                     }
                 })
         })
@@ -113,18 +120,22 @@ class PhotoCard extends Component {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            width: '30%',
-            height: '250px',
+            width: '172px',
+            height: '252px',
             backgroundColor: '#ccc',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            backgroundPosition: '50% 50%',
+            backgroundRepeat: 'no-repeat'
         }
         const { image } = this.props
-        const { resizedImageURL } = this.state
 
-        if (resizedImageURL) {
-            dropZoneStyles.background = `url(${resizedImageURL}) 50% 50% no-repeat`
-        } else if (image) {
-            dropZoneStyles.background = `url(${image.url}) 50% 50% no-repeat`
+        if (image) {
+            dropZoneStyles.backgroundColor = '#fff'
+            dropZoneStyles.backgroundImage = `url(${image.url})`
+
+            if (Array.isArray(image.resized) && image.resized.length) {
+                dropZoneStyles.backgroundImage = `url(${image.resized[0]})`
+            }
         }
 
         return (
@@ -142,6 +153,11 @@ class PhotoCard extends Component {
                         <PlusIcon>+</PlusIcon>
                     </AddButton>
                 )}
+                {!!image && (
+                    <RemoveButtonContainer onClick={event => this.onRemoveButtonClick(event)}>
+                        Remove
+                    </RemoveButtonContainer>
+                )}
             </Dropzone>
         )
     }
@@ -152,18 +168,40 @@ const withAddResized = graphql(
       updateFile(id: $id, resized: $resized) { id resized }
     }`,
     {
-        props: ({ ownProps, mutate }) => ({
+        props: ({ mutate }) => ({
             addResized (id, resized) {
                 return mutate({
                     variables: {
                         id,
                         resized
-                    },
-                    updateQueries: {}
+                    }
                 })
             }
         })
     }
 )
 
-export default withAddResized(PhotoCard)
+const withRemove = graphql(
+    gql`mutation deleteFile($id: ID!) {
+      deleteFile(id: $id) { id }
+    }`,
+    {
+        props: ({ mutate }) => ({
+            deleteFile (id) {
+                return mutate({
+                    variables: { id }
+                })
+            }
+        })
+    }
+)
+
+PhotoCard.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    deleteFile: PropTypes.func.isRequired,
+    addResized: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
+    image: PropTypes.object.isRequired
+}
+
+export default withRemove(withAddResized(PhotoCard))

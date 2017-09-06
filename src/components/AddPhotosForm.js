@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+
+import history from './../history'
 
 import styled from 'styled-components'
 
@@ -8,17 +11,21 @@ import PhotoCard from './PhotoCard'
 const PhotoCardsContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: space-around;
 `
 
 class AddPhotosForm extends Component {
+    onNextClick () {
+        history.push('/my-details')
+    }
+
     render () {
         const { images, dispatch } = this.props
 
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6 col-md-offset-3">
+                    <div className="col-md-8 col-md-offset-2">
                         <h1>Add Photos</h1>
                         <hr />
                         <h3>Add your quality photos</h3>
@@ -34,9 +41,10 @@ class AddPhotosForm extends Component {
                             }
                         </PhotoCardsContainer>
                         <div className="row"
-                             style={{ marginTop: '10px' }}>
+                             style={{ marginTop: '30px' }}>
                             <div className="col-md-12 clearfix">
-                                <button className="btn btn-success pull-right">Next</button>
+                                <button className="btn btn-success pull-right"
+                                        onClick={() => this.onNextClick()}>Next</button>
                             </div>
                         </div>
                     </div>
@@ -44,6 +52,11 @@ class AddPhotosForm extends Component {
             </div>
         )
     }
+}
+
+AddPhotosForm.propTypes = {
+    images: PropTypes.array.isRequired,
+    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(

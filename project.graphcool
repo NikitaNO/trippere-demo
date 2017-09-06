@@ -1,5 +1,5 @@
 # project: cj769xxru17aa015697aieh4r
-# version: 6
+# version: 17
 
 type File implements Node {
   contentType: String!
@@ -23,7 +23,29 @@ type User implements Node {
   gender: Gender!
 }
 
+type Plan implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  currency: Currency!
+  destination: Country
+  duration: Int!
+  price: Int!
+}
+
 enum Gender {
   Male
   Female
+}
+
+enum Country {
+  Japan
+  Albania
+  Canada
+  France
+}
+
+enum Currency {
+  USD
+  EUR
 }

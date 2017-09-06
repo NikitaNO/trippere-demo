@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 import history from './../history'
 
@@ -58,7 +59,7 @@ class RegisterForm extends Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6 col-md-offset-3">
+                    <div className="col-md-8 col-md-offset-2">
                         <form onSubmit={handleSubmit(props => this.onSubmit(props))}
                               className="row">
                             <h1>My Details</h1>
@@ -109,7 +110,7 @@ const withAddUser = graphql(
       createUser(firstName: $firstName, lastName: $lastName, birthDate: $birthDate, gender: $gender) { firstName lastName birthDate gender }
     }`,
     {
-        props: ({ ownProps, mutate }) => ({
+        props: ({ mutate }) => ({
             addUser (firstName, lastName, birthDate, gender) {
                 return mutate({
                     variables: {
@@ -117,13 +118,18 @@ const withAddUser = graphql(
                         lastName,
                         birthDate,
                         gender
-                    },
-                    updateQueries: {}
+                    }
                 })
             }
         })
     }
 )
+
+RegisterForm.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    addUser: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired
+}
 
 export default withAddUser(
     reduxForm({

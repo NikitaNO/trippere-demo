@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 
-import { RegisterForm, AddPhotosForm } from './../components'
+import { RegisterForm, AddPhotosForm, MyDetailsForm } from './../components'
 
 export default class App extends Component {
     render () {
@@ -13,6 +13,8 @@ export default class App extends Component {
                            component={RegisterForm} />
                     <Route path="/add-photos"
                            component={AddPhotosForm} />
+                    <Route path="/my-details"
+                           component={MyDetailsForm} />
                 </Switch>
             </main>
         )
