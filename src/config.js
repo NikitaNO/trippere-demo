@@ -6,5 +6,5 @@ Decimal.set({
 
 export default {
     graphProjectId: 'cj769xxru17aa015697aieh4r',
-    aspectRatio: Decimal(252).div(178)
+    aspectRatio: Decimal(178).div(252)
 }

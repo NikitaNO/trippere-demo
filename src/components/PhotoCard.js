@@ -64,6 +64,8 @@ class PhotoCard extends Component {
         const image = new Image()
 
         image.addEventListener('load', () => {
+            const requiredWidth = 178
+            const requiredHeight = 252
             const ratio = Decimal(image.width).div(image.height)
             const isCropNeeded = !ratio.equals(config.aspectRatio)
 
@@ -75,10 +77,25 @@ class PhotoCard extends Component {
 
             dispatch(uploadImage(index, body))
                 .then(() => {
-                    if (isCropNeeded) {
-                        console.log('Crop needed')
+                    if (image.width < requiredWidth && image.height < requiredHeight) {
+                        return null
+                    } else if (isCropNeeded) {
+                        const startX = Math.round(image.width / 2 - requiredWidth / 2)
+                        const startY = Math.round(image.height / 2 - requiredHeight / 2)
+
+                        addResized(self.props.image.id, [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${startX}x${startY}:${requiredWidth}x${requiredHeight}`])
+                            .then(
+                                ({ data }) => {
+                                    self.setState({
+                                        resizedImageURL: data.updateFile.resized[0]
+                                    })
+                                },
+                                error => {
+                                    console.warn(error)
+                                }
+                            )
                     } else {
-                        addResized(self.props.image.id, [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/178x252`])
+                        addResized(self.props.image.id, [`https://images.graph.cool/v1/${config.graphProjectId}/${self.props.image.secret}/${requiredWidth}x${requiredHeight}`])
                             .then(({ data }) => {
                                 self.setState({
                                     resizedImageURL: data.updateFile.resized[0]
@@ -105,9 +122,9 @@ class PhotoCard extends Component {
         const { resizedImageURL } = this.state
 
         if (resizedImageURL) {
-            dropZoneStyles.backgroundImage = `url(${resizedImageURL})`
+            dropZoneStyles.background = `url(${resizedImageURL}) 50% 50% no-repeat`
         } else if (image) {
-            dropZoneStyles.backgroundImage = `url(${image.url})`
+            dropZoneStyles.background = `url(${image.url}) 50% 50% no-repeat`
         }
 
         return (
